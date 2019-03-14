@@ -12,7 +12,7 @@ const build = (board) => {
 
     for (let x of c.X_AXIS) {
       let troop = map[x+y]
-      line += ' ' + (troop ? troop.symbol : '.') + ' '
+      line += ' ' + (troop ? troop.symbol : String.fromCharCode(0x2022)) + ' '
     }
 
     line += ' || ' + y

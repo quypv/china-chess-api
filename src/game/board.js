@@ -46,6 +46,8 @@ class Board
     for (let pos in RED_TROOPS_MAP) {
       this.put(pos, Troop.fromCode(RED_TROOPS_MAP[pos]))
     }
+
+    this.scanMoves()
   }
 
   /**
@@ -93,10 +95,34 @@ class Board
   put (pos, troop) {
     if (this.validPosition(pos) && troop) {
       this._map[pos] = troop
+      troop.setPosition(pos)
       return true
     }
 
     return false
+  }
+
+  /**
+   * Scan troop available moves
+   */
+  scanMoves() {
+    for (let troop of this.getOnBoardTroops()) {
+      troop.calculateAvailableMoves(this)
+    }
+  }
+
+  /**
+   * @return {array}
+   */
+  getOnBoardTroops() {
+    let arr = []
+
+    for (let pos in this._map) {
+      let troop = this.at(pos) 
+      if (troop) arr.push(troop)
+    }
+
+    return arr
   }
 
   /**
@@ -137,10 +163,12 @@ class Board
     let troop = this.at(fromPos)
 
     if (!troop) return false
+    if (!this.validPosition(toPos)) return false
     if (!troop.canMoveTo(toPos)) return false
 
     this.take(fromPos)
-    this.put(toPos)
+    this.put(toPos, troop)
+    this.scanMoves()
 
     return true
   }

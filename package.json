@@ -1,0 +1,22 @@
+{
+  "name": "china-chess-api",
+  "version": "1.0.0",
+  "description": "Chess game core with no UI",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test/**/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quypv/china-chess-api.git"
+  },
+  "author": "quypv",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/quypv/china-chess-api/issues"
+  },
+  "homepage": "https://github.com/quypv/china-chess-api#readme",
+  "devDependencies": {
+    "mocha": "^6.0.2"
+  }
+}

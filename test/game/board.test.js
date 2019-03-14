@@ -6,7 +6,6 @@ var assert = require('assert')
 describe('New board', () => {
   var board = new Board()
   board.init()
-  Render.print(board)
 
   it('should have 32 troops on board', () => {
     assert.equal(board.countTroopOnBoard(), 32)
@@ -29,7 +28,7 @@ describe('Take & put', () => {
     let cannon = board.take('B7')
     board.put('B4', cannon)
     
-    Render.print(board)
+    //Render.print(board)
     assert.equal(board.at('B7'), null)
     assert.equal(board.at('B4').symbol, 'c')
     assert.equal(board.countTroopOnBoard(), 32)
@@ -41,7 +40,7 @@ describe('Take & put', () => {
     let cannon = board.take('B7')
     board.put('Z9', cannon)
     assert.equal(board.countTroopOnBoard(), 31)
-    Render.print(board)
+    //Render.print(board)
   })
 })
 

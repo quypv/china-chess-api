@@ -1,13 +1,11 @@
 const c = require('../../src/constants')
 const Board = require('../../src/game/board')
 const Render = require('../../src/game/render')
-const Rook = require('../../src/troops/rook')
 var assert = require('assert')
 
 describe('Rook movement', () => {
   let board = new Board()
   board.init()
-  Render.print(board)
 
   it('can not move up if blocked', () => {
     board.reset()
@@ -22,7 +20,7 @@ describe('Rook movement', () => {
   it('can move up', () => {
     board.reset()
     assert.equal(board.move('A9', 'A7'), true)
-    Render.print(board)
+    //Render.print(board)
   })
 
   it('can not move right if blocked', () => {
@@ -37,7 +35,7 @@ describe('Rook movement', () => {
     assert.equal(board.move('A7', 'A8'), true)
     assert.equal(board.move('A8', 'D8'), true)
     assert.equal(board.move('D8', 'D2'), true)
-    Render.print(board)
+    //Render.print(board)
   })
 
   it('can take down enemy troop', () => {
@@ -49,6 +47,6 @@ describe('Rook movement', () => {
     assert.equal(board.countTroopOnBoard(), 31)
     assert.equal(board.countTroopOnBoard(c.RED), 15)
     assert.equal(board.countTroopOnBoard(c.BLACK), 16)
-    Render.print(board)
+    //Render.print(board)
   })
 })

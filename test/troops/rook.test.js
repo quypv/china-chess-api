@@ -7,26 +7,10 @@ describe('Rook movement', () => {
   let board = new Board()
   board.init()
 
-  it('can not move up if blocked', () => {
-    board.reset()
-    assert.equal(board.move('A9', 'A6'), false)
-  })
-
-  it('can not move outside board', () => {
-    board.reset()
-    assert.equal(board.move('A9', 'Z9'), false)
-  })
-
   it('can move up', () => {
     board.reset()
     assert.equal(board.move('A9', 'A7'), true)
     //Render.print(board)
-  })
-
-  it('can not move right if blocked', () => {
-    board.reset()
-    board.move('A9', 'A7')
-    assert.equal(board.move('A7', 'B7'), false)
   })
 
   it('can move continuosly', () => {
@@ -48,5 +32,21 @@ describe('Rook movement', () => {
     assert.equal(board.countTroopOnBoard(c.RED), 15)
     assert.equal(board.countTroopOnBoard(c.BLACK), 16)
     //Render.print(board)
+  })
+
+  it('cannot move right if blocked', () => {
+    board.reset()
+    board.move('A9', 'A7')
+    assert.equal(board.move('A7', 'B7'), false)
+  })
+
+  it('cannot move up if blocked', () => {
+    board.reset()
+    assert.equal(board.move('A9', 'A6'), false)
+  })
+
+  it('cannot move outside board', () => {
+    board.reset()
+    assert.equal(board.move('A9', 'Z9'), false)
   })
 })

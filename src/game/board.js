@@ -112,6 +112,16 @@ class Board
   }
 
   /**
+   * Put a troop and re-scan moves
+   * @param {string} pos 
+   * @param {Object} troop 
+   */
+  forcePut (pos, troop) {
+    this.put(pos, troop)
+    this.scanMoves()
+  }
+
+  /**
    * @return {array}
    */
   getOnBoardTroops() {
@@ -178,6 +188,14 @@ class Board
    */
   get map() {
     return this._map
+  }
+
+  /**
+   * 
+   * @param {string} color 
+   */
+  getRiverBorderY(color = c.BLACK) {
+    return c.Y_AXIS.charAt(c.Y_AXIS.length / 2 - (color === c.BLACK ? 0 : 1))
   }
 }
 

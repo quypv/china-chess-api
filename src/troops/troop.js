@@ -34,6 +34,13 @@ class Troop
   }
 
   /**
+   * @return {string}
+   */
+  get enemyColor() {
+    return this.isBlack() ? c.RED : c.BLACK
+  }
+
+  /**
    * Black troop: lower case char
    * Red troop: uppser case char
    * @return {string}
@@ -67,6 +74,54 @@ class Troop
    */
   isEnemy(otherTroop) {
     return otherTroop.color !== this._color
+  }
+
+  /**
+   * Is enemy troop
+   * @param {Troop} otherTroop 
+   */
+  isAlly(otherTroop) {
+    return !this.isEnemy(otherTroop)
+  }
+
+  /**
+   * @param {Board} board
+   * @return {string}
+   */
+  getRiverY(board) {
+    return board.getRiverBorderY(this._color)
+  }
+
+  /**
+   * @param {Board} board 
+   * @return {string}
+   */
+  getEnemyRiverY(board) {
+    return board.getRiverBorderY(this.enemyColor)
+  }
+
+  /**
+   * 
+   * @param {string} pos 
+   * @param {Board} board 
+   */
+  posCrossedRiver(pos, board) {
+    let iy = c.Y_AXIS.indexOf(pos.charAt(1))
+    let iEnemyRiver = c.Y_AXIS.indexOf(this.getEnemyRiverY(board))
+    
+    return this.isBlack() 
+      ? iy <= iEnemyRiver
+      : iy >= iEnemyRiver
+  }
+
+  /**
+   * 
+   * @param {string} pos 
+   * @param {Board} board 
+   */
+  allyAlreadyOnPos(pos, board) {
+    let troop = board.at(pos)
+    return !!troop && this.isAlly(troop)
   }
 }
 

@@ -42,7 +42,7 @@ class Pawn extends Troop
   trySideMoves(board) {
     let arrPos = []
 
-    if (this.posCrossedRiver(this._pos, board)) {
+    if (this.posCrossedRiver(this._pos)) {
       let leftPos = p.left(this._pos)
       let rightPos = p.right(this._pos)
 

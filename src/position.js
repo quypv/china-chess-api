@@ -29,6 +29,7 @@ const validateY = (y) => {
 }
 
 /**
+ * Valid position: [A-I][0-9]
  * @param {string} pos 
  */
 const validate = (pos) => {
@@ -143,6 +144,13 @@ const downRight = (currPos, stepUp = 1, stepRight = 1) => {
   return right(downPos, stepRight)
 }
 
+/**
+ * @param {string} color 
+ */
+const getRiverBorderY = (color = c.BLACK) => {
+  return c.Y_AXIS.charAt(c.Y_AXIS.length / 2 - (color === c.BLACK ? 0 : 1))
+}
+
 module.exports = {
   up,
   down,
@@ -152,4 +160,6 @@ module.exports = {
   upRight,
   downLeft,
   downRight,
+  validate,
+  getRiverBorderY,
 }

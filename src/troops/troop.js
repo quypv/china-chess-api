@@ -1,4 +1,5 @@
 const c = require('../constants')
+const p = require('../position')
 
 class Troop 
 {
@@ -85,29 +86,26 @@ class Troop
   }
 
   /**
-   * @param {Board} board
    * @return {string}
    */
-  getRiverY(board) {
-    return board.getRiverBorderY(this._color)
+  getRiverY() {
+    return p.getRiverBorderY(this._color)
   }
 
   /**
-   * @param {Board} board 
    * @return {string}
    */
-  getEnemyRiverY(board) {
-    return board.getRiverBorderY(this.enemyColor)
+  getEnemyRiverY() {
+    return p.getRiverBorderY(this.enemyColor)
   }
 
   /**
    * 
    * @param {string} pos 
-   * @param {Board} board 
    */
-  posCrossedRiver(pos, board) {
+  posCrossedRiver(pos) {
     let iy = c.Y_AXIS.indexOf(pos.charAt(1))
-    let iEnemyRiver = c.Y_AXIS.indexOf(this.getEnemyRiverY(board))
+    let iEnemyRiver = c.Y_AXIS.indexOf(this.getEnemyRiverY())
     
     return this.isBlack() 
       ? iy <= iEnemyRiver

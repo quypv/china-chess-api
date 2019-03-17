@@ -80,7 +80,7 @@ class Bishop extends Troop
     let moves = []
 
     for (let pos of arrPos) {
-      if (this.posCrossedRiver(pos, board)) continue
+      if (this.posCrossedRiver(pos)) continue
       if (this.allyAlreadyOnPos(pos, board)) continue
       if (this.anyTroopBlockPath(this._pos, pos, board)) continue
 

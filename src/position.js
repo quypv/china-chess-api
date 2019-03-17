@@ -175,7 +175,7 @@ const getKingZone = (color = c.BLACK) => {
     color === c.BLACK ? upRight(kingPos, 2, 1) : downRight(kingPos, 2, 1),
     color === c.BLACK ? upLeft(kingPos, 1, 1)  : downLeft(kingPos, 1, 1),
     color === c.BLACK ? up(kingPos)            : down(kingPos),
-    color === c.BLACK ? upRight(kingPos, 2, 1) : upRight(kingPos, 2, 1),
+    color === c.BLACK ? upRight(kingPos, 1, 1) : downRight(kingPos, 1, 1),
     left(kingPos),
     kingPos,
     right(kingPos),

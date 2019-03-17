@@ -151,6 +151,46 @@ const getRiverBorderY = (color = c.BLACK) => {
   return c.Y_AXIS.charAt(c.Y_AXIS.length / 2 - (color === c.BLACK ? 0 : 1))
 }
 
+/**
+ * @param {string} color 
+ * @return {string}
+ */
+const getKingPos = (color = c.BLACK) => {
+  let centerX = c.X_AXIS.charAt(c.X_AXIS.length / 2)
+  let y = color === c.BLACK ? c.Y_AXIS.slice(-1) : c.Y_AXIS.slice(0,1)
+
+  return centerX + y
+}
+
+/**
+ * @param {string} color 
+ * @return {array}
+ */
+const getKingZone = (color = c.BLACK) => {
+  let kingPos = getKingPos(color)
+
+  return [
+    color === c.BLACK ? upLeft(kingPos, 2, 1)  : downLeft(kingPos, 2, 1),
+    color === c.BLACK ? up(kingPos, 2)         : down(kingPos, 2),
+    color === c.BLACK ? upRight(kingPos, 2, 1) : downRight(kingPos, 2, 1),
+    color === c.BLACK ? upLeft(kingPos, 1, 1)  : downLeft(kingPos, 1, 1),
+    color === c.BLACK ? up(kingPos)            : down(kingPos),
+    color === c.BLACK ? upRight(kingPos, 2, 1) : upRight(kingPos, 2, 1),
+    left(kingPos),
+    kingPos,
+    right(kingPos),
+  ]
+}
+
+/**
+ * @param {string} pos 
+ * @param {string} color 
+ * @return {boolean}
+ */
+const inKingZone = (pos, color = c.BLACK) => {
+  return getKingZone(color).indexOf(pos) !== -1
+}
+
 module.exports = {
   up,
   down,
@@ -162,4 +202,5 @@ module.exports = {
   downRight,
   validate,
   getRiverBorderY,
+  inKingZone,
 }

@@ -1,4 +1,4 @@
-const Hisotry = requrie('./history')
+const Hisotry = require('./history')
 const Board = require('./board')
 
 class Game 
@@ -6,9 +6,10 @@ class Game
   constructor() {
     this._board = new Board()
     this._history = new Hisotry()
+    this.newGame()
   }
 
-  start() {
+  newGame() {
     this._board.init()
   }
 
@@ -20,12 +21,34 @@ class Game
     return this._board
   }
 
-  get hisotry() {
+  get history() {
     return this._history
   }
 
   queryHistory(size=1) {
     return this._history.queryBack(size)
+  }
+
+  /**
+   * Move a troop
+   * @param {string} fromPos 
+   * @param {string} toPos 
+   */
+  move(fromPos, toPos) {
+    let success = this._board.move(fromPos, toPos)
+    this.putHistory()
+
+    return success
+  }
+
+  /**
+   * @return 
+   */
+  undo() {
+    let state = this._history.pop()
+    state
+      ? this._board.loadFromStrState(state)
+      : this._board.setupDefault()
   }
 }
 

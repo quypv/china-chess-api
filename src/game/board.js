@@ -8,6 +8,19 @@ class Board
    * Init blank board
    */
   init(troopsMap = null) {
+    this.setupDefault()
+
+    if (troopsMap) {
+      // console.log('troopsMap keys size: ')
+      // console.log(Object.keys(troopsMap).length)
+      this.loadSavedBoard(troopsMap)
+    }
+  }
+
+  /**
+   * Clear all troops
+   */
+  blank() {
     this._map = {}
 
     for (let x of c.X_AXIS) {
@@ -15,20 +28,14 @@ class Board
         this._map[x+y] = null
       }
     }
-
-    this.setupDefault()
-
-    if (troopsMap) {
-      console.log('troopsMap keys size: ')
-      console.log(Object.keys(troopsMap).length)
-      this.loadSavedBoard(troopsMap)
-    }
   }
 
   /**
    * Populate default troops map
    */
   setupDefault() {
+    this.blank()
+
     for (let pos in c.BLACK_TROOPS_MAP) {
       this.put(pos, Troop.fromCode(c.BLACK_TROOPS_MAP[pos]))
     }
@@ -51,7 +58,21 @@ class Board
    * Populate saved board
    */
   loadSavedBoard(troopsMap) {
+    this.blank()
+    
+    for (let pos in troopsMap) {
+      this.put(pos, Troop.fromCode(troopsMap[pos]))
+    }
 
+    this.scanMoves()
+  }
+
+  /**
+   * 
+   * @param {string} state 
+   */
+  loadFromStrState(state) {
+    return this.loadSavedBoard(this.decode(state))
   }
 
   /**
@@ -167,6 +188,34 @@ class Board
    */
   get map() {
     return this._map
+  }
+
+  /**
+   * Encode & compress to data
+   */
+  encode() {
+    let compressedMap = {}
+
+    for (let troop of this.getOnBoardTroops()) {
+      compressedMap[troop.pos] = troop.symbol
+    }
+
+    return JSON.stringify(compressedMap)
+  }
+
+  /**
+   * Decode compressed data to loadable map
+   * @param {string} compressedMap
+   */
+  decode(compressedMap) {
+    let data = JSON.parse(compressedMap)
+    let map = {}
+
+    for (let pos in data) {
+      map[pos] = c.SYMBOLS_REVERSE[data[pos]]
+    }
+
+    return map
   }
 }
 

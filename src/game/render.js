@@ -1,6 +1,20 @@
 const c = require('../constants')
+const Board = require('./board')
+const Game = require('./game')
 
-const build = (board) => {
+const build = (boardOrGame) => {
+  let board
+
+  if (boardOrGame instanceof Game) {
+    board = boardOrGame.board
+  }
+  else if (boardOrGame instanceof Board) {
+    board = boardOrGame
+  }
+  else {
+    return false
+  }
+  
   let map = board.map
   let txt = ''
 
@@ -25,8 +39,8 @@ const build = (board) => {
   return txt
 }
 
-const print = (board) => {
-  console.log(build(board))
+const print = (boardOrGame) => {
+  console.log(build(boardOrGame))
 }
 
 module.exports = {

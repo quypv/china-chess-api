@@ -6,9 +6,7 @@ class Troop
   constructor(code) {
     this._code = code
     this._color = this.isBlack() ? c.BLACK : c.RED
-    this._symbol = this.isBlack() 
-      ? code.match(/(?<=_)./g)[0].toLowerCase()
-      : code.match(/(?<=_)./g)[0].toUpperCase()
+    this._symbol = c.SYMBOLS[code]
     this._pos = null
     this._openMoves = []
   }
@@ -48,6 +46,27 @@ class Troop
    */
   get symbol() {
     return this._symbol
+  }
+
+  /**
+   * @return {string}
+   */
+  get pos() {
+    return this._pos
+  }
+
+  /**
+   * @return {string}
+   */
+  get code() {
+    return this._code
+  }
+
+  /**
+   * @return {array}
+   */
+  get moves() {
+    return this._openMoves
   }
 
   /**

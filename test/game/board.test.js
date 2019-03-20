@@ -43,7 +43,3 @@ describe('Take & put', () => {
     //Render.print(board)
   })
 })
-
-describe('Move', () => {
-  
-})

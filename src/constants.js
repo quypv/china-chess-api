@@ -39,6 +39,28 @@ const RED_TROOPS_MAP = {
   A3: RED_PAWN, C3: RED_PAWN, E3: RED_PAWN, G3: RED_PAWN, I3: RED_PAWN
 }
 
+const SYMBOLS = {
+  BLACK_BISHOP: 'b', RED_BISHOP: 'B',
+  BLACK_CANNON: 'c', RED_CANNON: 'C',
+  BLACK_GUARD:  'g', RED_GUARD:  'G',
+  BLACK_KING:   'k', RED_KING:   'K', 
+  BLACK_KNIGHT: 'n', RED_KNIGHT: 'N',
+  BLACK_PAWN:   'p', RED_PAWN:   'P',
+  BLACK_ROOK:   'r', RED_ROOK:   'R',
+}
+
+const swapKeyValue = (json) => {
+  let ret = {};
+
+  for(let key in json) {
+    ret[json[key]] = key;
+  }
+
+  return ret;
+}
+
+const SYMBOLS_REVERSE = swapKeyValue(SYMBOLS)
+
 module.exports = {
   X_AXIS, Y_AXIS,
   BLACK, RED,
@@ -51,4 +73,5 @@ module.exports = {
   KNIGHT, BLACK_KNIGHT, RED_KNIGHT,
   BLACK_TROOPS_MAP,
   RED_TROOPS_MAP,
+  SYMBOLS, SYMBOLS_REVERSE,
 }

@@ -1,6 +1,6 @@
-const c = require('../constants')
-const p = require('../position')
-const Troop = require('../troops/factory')
+const c = require('./constants')
+const p = require('./position')
+const Troop = require('./troops/factory')
 
 class Board 
 {
@@ -59,7 +59,7 @@ class Board
    */
   loadSavedBoard(troopsMap) {
     this.blank()
-    
+
     for (let pos in troopsMap) {
       this.put(pos, Troop.fromCode(troopsMap[pos]))
     }
@@ -81,6 +81,21 @@ class Board
    */
   at (pos) {
     return p.validate(pos) ? this._map[pos] : null
+  }
+
+  /**
+   * @param {string} troopCode 
+   * @param {array} zone
+   */
+  find (troopCode, zone = []) {
+    let posZone = zone.length ? zone : Object.keys(this._map)
+
+    for (let pos of posZone) {
+      if (!this._map[pos]) continue
+      if (this._map[pos].code === troopCode) return this._map[pos]
+    }
+
+    return null
   }
 
   /**
@@ -171,6 +186,7 @@ class Board
    */
   move (fromPos, toPos) {
     let troop = this.at(fromPos)
+    let targetTroop = this.at(toPos)
 
     if (!troop) return false
     if (!p.validate(toPos)) return false
@@ -216,6 +232,16 @@ class Board
     }
 
     return map
+  }
+
+  /**
+   * @return {boolean}
+   */
+  kingStand(color) {
+    return !!this.find(
+      color === c.BLACK ? c.BLACK_KING : c.RED_KING, 
+      color === c.BLACK ? c.BLACK_KING_ZONE : c.RED_KING_ZONE
+    )
   }
 }
 

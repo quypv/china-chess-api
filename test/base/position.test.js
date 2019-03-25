@@ -1,4 +1,4 @@
-const p = require('../src/position')
+const p = require('../../src/base/position')
 var assert = require('assert')
 
 describe('Position helper', () => {

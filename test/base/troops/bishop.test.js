@@ -1,6 +1,6 @@
-const c = require('../../src/constants')
-const Board = require('../../src/game/board')
-const Render = require('../../src/game/render')
+const c = require('../../../src/base/constants')
+const Board = require('../../../src/base/board')
+const Render = require('../../../src/base/render')
 var assert = require('assert')
 
 describe('Bishop movement', () => {

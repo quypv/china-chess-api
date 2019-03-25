@@ -1,6 +1,21 @@
 const X_AXIS = 'ABCDEFGHI'
 const Y_AXIS = '0123456789'
 
+const BLACK_KING_ZONE = [
+  'D7', 'E7', 'F7',
+  'D8', 'E8', 'F8',
+  'D9', 'E9', 'F9',
+]
+
+const RED_KING_ZONE = [
+  'D0', 'E0', 'F0',
+  'D1', 'E1', 'F1',
+  'D2', 'E2', 'F2',
+]
+
+const RED_RIVER_BORDER_Y = 4
+const BLACK_RIVER_BORDER_Y = 5
+
 const BLACK = "BLACK"
 const RED = "RED"
 
@@ -74,4 +89,6 @@ module.exports = {
   BLACK_TROOPS_MAP,
   RED_TROOPS_MAP,
   SYMBOLS, SYMBOLS_REVERSE,
+  BLACK_KING_ZONE, RED_KING_ZONE,
+  RED_RIVER_BORDER_Y, BLACK_RIVER_BORDER_Y,
 }

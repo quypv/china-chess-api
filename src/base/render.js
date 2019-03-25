@@ -1,4 +1,4 @@
-const c = require('../constants')
+const c = require('./constants')
 const Board = require('./board')
 const Game = require('./game')
 

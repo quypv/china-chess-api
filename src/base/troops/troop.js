@@ -140,6 +140,13 @@ class Troop
     let troop = board.at(pos)
     return !!troop && this.isAlly(troop)
   }
+
+  /**
+   * @return {boolean}
+   */
+  isKing() {
+    return this._code.indexOf(c.KING) !== -1
+  }
 }
 
 module.exports = Troop

@@ -1,7 +1,6 @@
-const c = require('../../src/constants')
-const Game = require('../../src/game/game')
-const Board = require('../../src/game/board')
-const Render = require('../../src/game/render')
+const Game = require('../../src/base/game')
+const Board = require('../../src/base/board')
+const Render = require('../../src/base/render')
 var assert = require('assert')
 
 describe('Game', () => {

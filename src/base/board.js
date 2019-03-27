@@ -162,6 +162,21 @@ class Board
   }
 
   /**
+   * @param {string} color 
+   * @return {array}
+   */
+  getTroopsByColor(color = c.BLACK) {
+    let arr = []
+
+    for (let pos in this._map) {
+      let troop = this.at(pos) 
+      if (troop && troop.color === color) arr.push(troop)
+    }
+
+    return arr
+  }
+
+  /**
    * Count number of troops left
    */
   countTroopOnBoard(color = null) {

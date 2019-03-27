@@ -54,15 +54,27 @@ const RED_TROOPS_MAP = {
   A3: RED_PAWN, C3: RED_PAWN, E3: RED_PAWN, G3: RED_PAWN, I3: RED_PAWN
 }
 
-const SYMBOLS = {
-  BLACK_BISHOP: 'b', RED_BISHOP: 'B',
-  BLACK_CANNON: 'c', RED_CANNON: 'C',
-  BLACK_GUARD:  'g', RED_GUARD:  'G',
-  BLACK_KING:   'k', RED_KING:   'K', 
-  BLACK_KNIGHT: 'n', RED_KNIGHT: 'N',
-  BLACK_PAWN:   'p', RED_PAWN:   'P',
-  BLACK_ROOK:   'r', RED_ROOK:   'R',
+const BLACK_SYMBOLS = {
+  BLACK_BISHOP: 'b',
+  BLACK_CANNON: 'c',
+  BLACK_GUARD:  'g',
+  BLACK_KING:   'k',
+  BLACK_KNIGHT: 'n',
+  BLACK_PAWN:   'p',
+  BLACK_ROOK:   'r',
 }
+
+const RED_SYMBOLS = {
+  RED_BISHOP: 'B',
+  RED_CANNON: 'C',
+  RED_GUARD:  'G',
+  RED_KING:   'K', 
+  RED_KNIGHT: 'N',
+  RED_PAWN:   'P',
+  RED_ROOK:   'R',
+}
+
+const SYMBOLS = Object.assign({}, BLACK_SYMBOLS, RED_SYMBOLS)
 
 const swapKeyValue = (json) => {
   let ret = {};
@@ -88,7 +100,7 @@ module.exports = {
   KNIGHT, BLACK_KNIGHT, RED_KNIGHT,
   BLACK_TROOPS_MAP,
   RED_TROOPS_MAP,
-  SYMBOLS, SYMBOLS_REVERSE,
+  BLACK_SYMBOLS, RED_SYMBOLS, SYMBOLS, SYMBOLS_REVERSE,
   BLACK_KING_ZONE, RED_KING_ZONE,
   RED_RIVER_BORDER_Y, BLACK_RIVER_BORDER_Y,
 }

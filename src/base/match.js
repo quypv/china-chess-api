@@ -9,16 +9,16 @@ const DEFAULT_RESULT = {
   ended: ENDED_FALSE,
 }
 
-class Game 
+class Match 
 {
   constructor() {
     this._board = new Board()
     this._history = new Hisotry()
     this._result = DEFAULT_RESULT
-    this.newGame()
+    this.newMatch()
   }
 
-  newGame() {
+  newMatch() {
     this._board.init()
   }
 
@@ -44,7 +44,7 @@ class Game
    * @param {string} toPos 
    */
   move(fromPos, toPos) {
-    if (!this.isPlaying()) return false
+    if (this.isEnded()) return false
 
     let result = this._board.move(fromPos, toPos)
     let success = !!result
@@ -55,7 +55,7 @@ class Game
 
     let loserColor
     if (loserColor = this.checkKingDown()) {
-      this.endGame(loserColor)
+      this.endMatch(loserColor)
     }
 
     return success
@@ -65,7 +65,7 @@ class Game
    * @return 
    */
   undo() {
-    if (!this.isPlaying()) return false
+    if (this.isEnded()) return false
 
     let state = this._history.pop()
     state
@@ -90,8 +90,8 @@ class Game
   /**
    * @param {string} loserColor 
    */
-  endGame(loserColor) {
-    this._result.winner = loserColor === c.BLACK ? c.BLACK : c.RED
+  endMatch(loserColor) {
+    this._result.winner = loserColor === c.BLACK ? c.RED : c.BLACK
     this._result.ended = ENDED_TRUE
     Object.freeze(this._history)
     Object.freeze(this._board)
@@ -100,9 +100,16 @@ class Game
   /**
    * @return {boolean}
    */
-  isPlaying() {
-    return this._result.ended === ENDED_FALSE
+  isEnded() {
+    return this._result.ended === ENDED_TRUE
+  }
+
+  /**
+   * @return {string}
+   */
+  winner() {
+    return this._result.winner  
   }
 }
 
-module.exports = Game
+module.exports = Match

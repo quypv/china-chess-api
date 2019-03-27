@@ -1,15 +1,18 @@
 const c = require('./constants')
 const Board = require('./board')
-const Game = require('./game')
+const Match = require('./match')
 
-const build = (boardOrGame) => {
+const build = (boardMatchGame) => {
   let board
 
-  if (boardOrGame instanceof Game) {
-    board = boardOrGame.board
+  if (boardMatchGame.match instanceof Match) {
+    board = boardMatchGame.match.board
   }
-  else if (boardOrGame instanceof Board) {
-    board = boardOrGame
+  else if (boardMatchGame instanceof Match) {
+    board = boardMatchGame.board
+  }
+  else if (boardMatchGame instanceof Board) {
+    board = boardMatchGame
   }
   else {
     return false
@@ -39,8 +42,8 @@ const build = (boardOrGame) => {
   return txt
 }
 
-const print = (boardOrGame) => {
-  console.log(build(boardOrGame))
+const print = (boardMatchGame) => {
+  console.log(build(boardMatchGame))
 }
 
 module.exports = {

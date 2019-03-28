@@ -133,7 +133,7 @@ class Board
    */
   scanMoves() {
     for (let troop of this.getOnBoardTroops()) {
-      troop.calculateAvailableMoves(this)
+      troop.calculateMoves(this)
     }
   }
 

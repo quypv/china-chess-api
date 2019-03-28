@@ -1,5 +1,6 @@
 const p = require('../position')
 const Troop = require('./troop')
+const Moves = require('./moves')
 
 class King extends Troop
 {
@@ -11,28 +12,32 @@ class King extends Troop
    * See what moves this troop can take
    * @param {Board} board 
    */
-  calculateAvailableMoves(board) {
-    this._openMoves = []
-
-    if (!this._pos) {
-      return false
-    }
-
-    let arrPos = [
+  simulateMoves(board) {
+    let moves = new Moves()
+    let unValidatePosList = [].concat(
       p.up(this._pos),
       p.down(this._pos),
       p.left(this._pos),
       p.right(this._pos)
-    ]
+    )
 
-    for (let pos of arrPos) {
+    for (let pos of unValidatePosList) {
       if (!pos) continue
       if (!p.validate(pos)) continue
       if (!p.inKingZone(pos, this._color)) continue
-      if (this.allyAlreadyOnPos(pos, board)) continue
+      
+      let troop = board.at(pos)
+      if (troop) {
+        this.isEnemy(troop)
+          ? moves.pushCapture(pos, troop.code)
+          : moves.pushGuard(pos, troop.code)
+        continue
+      }
 
-      this._openMoves.push(pos)
+      moves.push(pos)
     }
+
+    return moves
   }
 }
 

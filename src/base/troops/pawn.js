@@ -1,6 +1,7 @@
 const c = require('../constants')
 const p = require('../position')
 const Troop = require('./troop')
+const Moves = require('./moves')
 
 class Pawn extends Troop
 {
@@ -12,16 +13,26 @@ class Pawn extends Troop
    * See what moves this troop can take
    * @param {Board} board 
    */
-  calculateAvailableMoves(board) {
-    if (!this._pos) {
-      this._openMoves = []
-      return false
+  simulateMoves(board) {
+    let moves = new Moves()
+    let unValidatePosList = [].concat(
+      this.tryForward(board),
+      this.trySideMoves(board)
+    )
+
+    for (let pos of unValidatePosList) {
+      let troop = board.at(pos)
+      if(troop) {
+        this.isEnemy(troop)
+          ? moves.pushCapture(pos, troop.code)
+          : moves.pushGuard(pos, troop.code)
+        continue
+      }
+
+      moves.push(pos)
     }
 
-    let forward = this.tryForward(board)
-    let horizontal = this.trySideMoves(board)
-
-    this._openMoves = [].concat(forward, horizontal)
+    return moves
   }
 
   /**
@@ -32,7 +43,7 @@ class Pawn extends Troop
     let fwdPos = this.isBlack() ? p.up(this._pos) : p.down(this._pos)
     if (fwdPos) arrPos.push(fwdPos)
 
-    return this.try(arrPos, board)
+    return arrPos
   }
 
   /**
@@ -50,25 +61,7 @@ class Pawn extends Troop
       if (rightPos) arrPos.push(rightPos)
     }
 
-    return this.try(arrPos, board)
-  }
-
-  /**
-   * 
-   * @param {array} arrPos 
-   * @param {Board} board 
-   * @return {array}
-   */
-  try (arrPos, board) {
-    let moves = []
-
-    for (let pos of arrPos) {
-      if (this.allyAlreadyOnPos(pos, board)) continue
-
-      moves.push(pos)
-    }
-
-    return moves
+    return arrPos
   }
 }
 

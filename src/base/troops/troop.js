@@ -1,5 +1,6 @@
 const c = require('../constants')
 const p = require('../position')
+const Moves = require('./moves')
 
 class Troop 
 {
@@ -8,7 +9,11 @@ class Troop
     this._color = this.isBlack() ? c.BLACK : c.RED
     this._symbol = c.SYMBOLS[code]
     this._pos = null
-    this._openMoves = []
+    this._moves = new Moves()
+    // this._openMoves = []
+    // this._guardMoves = {}
+    // this._captureMoves = {}
+    // this._defendMoves = {}
   }
 
   /**
@@ -66,7 +71,7 @@ class Troop
    * @return {array}
    */
   get moves() {
-    return this._openMoves
+    return this._moves.getActive()
   }
 
   /**
@@ -79,13 +84,22 @@ class Troop
   /**
    * Calculate all available moves for current position
    */
-  calculateAvailableMoves(board) { }
+  calculateMoves(board) { 
+    let moves = this._pos ? this.simulateMoves(board) : new Moves()
+    this._moves = moves
+  }
+
+  /**
+   * Predict available moves for current position
+   * @return {Moves}
+   */
+  simulateMoves(board) { }
 
   /**
    * @return {boolean}
    */
   canMoveTo(toPos) {
-    return this._openMoves.indexOf(toPos) !== -1
+    return this.moves.indexOf(toPos) !== -1
   }
 
   /**
@@ -136,9 +150,13 @@ class Troop
    * @param {string} pos 
    * @param {Board} board 
    */
-  allyAlreadyOnPos(pos, board) {
+  getAllyOnPos(pos, board) {
     let troop = board.at(pos)
-    return !!troop && this.isAlly(troop)
+
+    if (!troop) return null
+    if (!this.isAlly(troop)) return null
+
+    return troop
   }
 
   /**

@@ -1,6 +1,7 @@
 const c = require('../constants')
 const p = require('../position')
 const Troop = require('./troop')
+const Moves = require('./moves')
 
 class Knight extends Troop
 {
@@ -12,18 +13,28 @@ class Knight extends Troop
    * See what moves this troop can take
    * @param {Board} board 
    */
-  calculateAvailableMoves(board) {
-    if (!this._pos) {
-      this._openMoves = []
-      return false
+  simulateMoves(board) {
+    let moves = new Moves()
+    let unValidatePosList = [].concat(
+      this.tryUp(board),
+      this.tryDown(board),
+      this.tryLeft(board),
+      this.tryRight(board)
+    )
+    
+    for (let pos of unValidatePosList) {
+      let troop = board.at(pos)
+      if(troop) {
+        this.isEnemy(troop)
+          ? moves.pushCapture(pos, troop.code)
+          : moves.pushGuard(pos, troop.code)
+        continue
+      }
+
+      moves.push(pos)
     }
 
-    let upMoves = this.tryUp(board)
-    let downMoves = this.tryDown(board)
-    let leftMoves = this.tryLeft(board)
-    let rightMoves = this.tryRight(board)
-
-    this._openMoves = [].concat(upMoves, downMoves, leftMoves, rightMoves)
+    return moves
   }
 
   /**
@@ -42,7 +53,7 @@ class Knight extends Troop
     if (upPosL = p.upLeft(this._pos, 2, 1))  arrPos.push(upPosL)
     if (upPosR = p.upRight(this._pos, 2, 1)) arrPos.push(upPosR)
 
-    return this.try(arrPos, board)
+    return arrPos
   }
 
   /**
@@ -61,7 +72,7 @@ class Knight extends Troop
     if (downPosL = p.downLeft(this._pos, 2, 1))  arrPos.push(downPosL)
     if (downPosR = p.downRight(this._pos, 2, 1)) arrPos.push(downPosR)
 
-    return this.try(arrPos, board)
+    return arrPos
   }
 
   /**
@@ -80,7 +91,7 @@ class Knight extends Troop
     if (leftPosL = p.upLeft(this._pos, 1, 2))   arrPos.push(leftPosL)
     if (leftPosR = p.downLeft(this._pos, 1, 2)) arrPos.push(leftPosR)
 
-    return this.try(arrPos, board)
+    return arrPos
   }
 
   /**
@@ -99,23 +110,7 @@ class Knight extends Troop
     if (rightPosL = p.upRight(this._pos, 1, 2))   arrPos.push(rightPosL)
     if (rightPosR = p.downRight(this._pos, 1, 2)) arrPos.push(rightPosR)
 
-    return this.try(arrPos, board)
-  }
-
-  /**
-   * @param {array} arrPos 
-   * @param {Board} board 
-   * @return {array}
-   */
-  try (arrPos, board) {
-    let moves = []
-
-    for (let pos of arrPos) {
-      if (this.allyAlreadyOnPos(pos, board)) continue
-      moves.push(pos)
-    }
-
-    return moves
+    return arrPos
   }
 }
 

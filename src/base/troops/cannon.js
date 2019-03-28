@@ -1,5 +1,7 @@
 const c = require('../constants')
+const p = require('../position')
 const Troop = require('./troop')
+const Moves = require('./moves')
 
 class Cannon extends Troop
 {
@@ -11,20 +13,45 @@ class Cannon extends Troop
    * See what moves this troop can take
    * @param {Board} board 
    */
-  calculateAvailableMoves(board) {
-    if (!this._pos) {
-      this._openMoves = []
-      return false
-    }
-
+  simulateMoves(board) {
+    let moves = new Moves()
     let x = this._pos.charAt(0)
     let y = this._pos.charAt(1)
-    let upMoves = this.tryUp(x, y, board)
-    let downMoves = this.tryDown(x, y, board)
-    let leftMoves = this.tryLeft(x, y, board)
-    let rightMoves = this.tryRight(x, y, board)
+    
+    let unValidateMoves = {
+      up: this.tryUp(x, y, board),
+      down: this.tryDown(x, y, board),
+      left: this.tryLeft(x, y, board),
+      right: this.tryRight(x, y, board)
+    }
 
-    this._openMoves = [].concat(upMoves, downMoves, leftMoves, rightMoves)
+    for (let direction in unValidateMoves) 
+    {
+      let fightMode = false
+      for (let pos of unValidateMoves[direction]) 
+      {
+        let troop = board.at(pos)
+  
+        if (!troop) {
+          if (!fightMode) moves.push(pos)
+          continue
+        }
+  
+        if (!fightMode) {
+          fightMode = true
+          continue
+        }
+
+        this.isEnemy(troop) 
+          ? moves.pushCapture(pos, troop.code)
+          : moves.pushGuard(pos, troop.code)
+
+        moves.push(pos)
+        break
+      }
+    }
+
+    return moves
   }
 
   /**
@@ -38,7 +65,7 @@ class Cannon extends Troop
       return x + val
     })
     
-    return this.try(arrPos, board)
+    return arrPos
   }
 
   /**
@@ -52,7 +79,7 @@ class Cannon extends Troop
       return x + val
     })
     
-    return this.try(arrPos, board)
+    return arrPos
   }
 
   /**
@@ -66,7 +93,7 @@ class Cannon extends Troop
       return val + y
     })
     
-    return this.try(arrPos, board)
+    return arrPos
   }
 
   /**
@@ -80,38 +107,38 @@ class Cannon extends Troop
       return val + y
     })
 
-    return this.try(arrPos, board)
+    return arrPos
   }
 
   /**
    * Check valid positions in list
    * @param {array} arrPos 
    */
-  try(directionalArrPos, board) {
-    let moves = []
-    let fightMode = false
+  // try(directionalArrPos, board) {
+  //   let moves = []
+  //   let fightMode = false
 
-    for (let pos of directionalArrPos) {
-      let troop = board.at(pos)
+  //   for (let pos of directionalArrPos) {
+  //     let troop = board.at(pos)
 
-      if (!troop) {
-        if (!fightMode) moves.push(pos)
-        continue
-      }
+  //     if (!troop) {
+  //       if (!fightMode) moves.push(pos)
+  //       continue
+  //     }
 
-      if (!fightMode) {
-        fightMode = true
-        continue
-      }
+  //     if (!fightMode) {
+  //       fightMode = true
+  //       continue
+  //     }
 
-      if (this.isEnemy(troop)) {
-        moves.push(pos)
-        break
-      }
-    }
+  //     if (this.isEnemy(troop)) {
+  //       moves.push(pos)
+  //       break
+  //     }
+  //   }
 
-    return moves
-  }
+  //   return moves
+  // }
 }
 
 module.exports = Cannon

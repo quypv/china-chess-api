@@ -1,6 +1,7 @@
 const c = require('../constants')
 const p = require('../position')
 const Troop = require('./troop')
+const Moves = require('./moves')
 
 class Bishop extends Troop
 {
@@ -12,16 +13,28 @@ class Bishop extends Troop
    * See what moves this troop can take
    * @param {Board} board 
    */
-  calculateAvailableMoves(board) {
-    if (!this._pos) {
-      this._openMoves = []
-      return false
+  simulateMoves(board) {
+    let moves = new Moves()
+    let unValidateMoves = [].concat(
+      this.tryLeft(board),
+      this.tryRight(board)
+    );
+
+    for (let pos of unValidateMoves) {
+      if (this.posCrossedRiver(pos)) continue
+
+      let troop = board.at(pos)
+      if (troop) {
+        this.isEnemy(troop) 
+          ? moves.pushCapture(pos, troop.code)
+          : moves.pushGuard(pos, troop.code)
+        continue
+      }
+
+      moves.push(pos)
     }
 
-    let leftMoves = this.tryLeft(board)
-    let rightMoves = this.tryRight(board)
-
-    this._openMoves = [].concat(leftMoves, rightMoves)
+    return moves
   }
 
   /**
@@ -41,7 +54,7 @@ class Bishop extends Troop
     if (upPos && !board.at(blockerUp))     arrPos.push(upPos)
     if (downPos && !board.at(blockerDown)) arrPos.push(downPos)
 
-    return this.try(arrPos, board)
+    return arrPos
   }
 
   /**
@@ -61,26 +74,7 @@ class Bishop extends Troop
     if (upPos && !board.at(blockerUp))     arrPos.push(upPos)
     if (downPos && !board.at(blockerDown)) arrPos.push(downPos)
 
-    return this.try(arrPos, board)
-  }
-
-  /**
-   * 
-   * @param {array} arrPos 
-   * @param {Board} board 
-   * @return {array}
-   */
-  try (arrPos, board) {
-    let moves = []
-
-    for (let pos of arrPos) {
-      if (this.posCrossedRiver(pos)) continue
-      if (this.allyAlreadyOnPos(pos, board)) continue
-
-      moves.push(pos)
-    }
-
-    return moves
+    return arrPos
   }
 }
 

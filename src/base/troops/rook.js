@@ -1,5 +1,6 @@
 const c = require('../constants')
 const Troop = require('./troop')
+const Moves = require('./moves')
 
 class Rook extends Troop
 {
@@ -11,20 +12,37 @@ class Rook extends Troop
    * See what moves this troop can take
    * @param {Board} board 
    */
-  calculateAvailableMoves(board) {
-    if (!this._pos) {
-      this._openMoves = []
-      return false
-    }
-
+  simulateMoves(board) {
+    let moves = new Moves()
     let x = this._pos.charAt(0)
     let y = this._pos.charAt(1)
-    let upMoves = this.tryUp(x, y, board)
-    let downMoves = this.tryDown(x, y, board)
-    let leftMoves = this.tryLeft(x, y, board)
-    let rightMoves = this.tryRight(x, y, board)
 
-    this._openMoves = [].concat(upMoves, downMoves, leftMoves, rightMoves)
+    let unValidateMoves = {
+      up: this.tryUp(x, y, board),
+      down: this.tryDown(x, y, board),
+      left: this.tryLeft(x, y, board),
+      right: this.tryRight(x, y, board)
+    }
+
+    for (let direction in unValidateMoves) 
+    {
+      for (let pos of unValidateMoves[direction]) 
+      {
+        let troop = board.at(pos)
+  
+        if (!troop) {
+          moves.push(pos)
+          continue
+        }
+  
+        this.isEnemy(troop)
+          ? moves.pushCapture(pos, troop.code)
+          : moves.pushGuard(pos, troop.code)
+        break
+      }
+    }
+
+    return moves
   }
 
   /**
@@ -38,7 +56,7 @@ class Rook extends Troop
       return x + val
     })
     
-    return this.try(arrPos, board)
+    return arrPos
   }
 
   /**
@@ -52,7 +70,7 @@ class Rook extends Troop
       return x + val
     })
     
-    return this.try(arrPos, board)
+    return arrPos
   }
 
   /**
@@ -66,7 +84,7 @@ class Rook extends Troop
       return val + y
     })
     
-    return this.try(arrPos, board)
+    return arrPos
   }
 
   /**
@@ -80,33 +98,33 @@ class Rook extends Troop
       return val + y
     })
 
-    return this.try(arrPos, board)
+    return arrPos
   }
 
   /**
    * Check valid positions in list
    * @param {array} arrPos 
    */
-  try(directionalArrPos, board) {
-    let moves = []
+  // try(directionalArrPos, board) {
+  //   let moves = []
 
-    for (let pos of directionalArrPos) {
-      let troop = board.at(pos)
+  //   for (let pos of directionalArrPos) {
+  //     let troop = board.at(pos)
 
-      if (!troop) {
-        moves.push(pos)
-        continue
-      }
+  //     if (!troop) {
+  //       moves.push(pos)
+  //       continue
+  //     }
 
-      if (this.isEnemy(troop)) {
-        moves.push(pos)
-      }
+  //     if (this.isEnemy(troop)) {
+  //       moves.push(pos)
+  //     }
       
-      break
-    }
+  //     break
+  //   }
 
-    return moves
-  }
+  //   return moves
+  // }
 }
 
 module.exports = Rook

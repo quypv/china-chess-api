@@ -1,5 +1,6 @@
 const c = require('../base/constants')
 const Analytic = require('./analytic')
+const Order = require('./order')
 
 class BotBase
 {
@@ -12,7 +13,7 @@ class BotBase
    * 
    * @param {Match} match 
    * @param {string} myColor 
-   * @return {object|null}
+   * @return {Order}
    */
   pickMove(match) {
     let analytic = new Analytic(match, this._color)
@@ -23,7 +24,7 @@ class BotBase
    * 
    * @param {Match} match 
    * @param {Analytic} analytic 
-   * @return {null|object}
+   * @return {Order}
    */
   algorithm(analytic) { }
 }

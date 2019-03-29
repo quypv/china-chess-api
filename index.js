@@ -11,13 +11,13 @@ const IN_DEBUG = 'IN_DEBUG'
 const IN_CONSOLE = 'IN_CONSOLE'
 
 let game = new NormalGame()
-let mode = IN_CONSOLE
+let mode = IN_DEBUG
 
 //----------------------------------------------------
 let runOneMove = (player) => {
   let nextMove = game.getSuggesionMove(player)
-  if (nextMove) {
-    console.log(nextMove.fromPos, nextMove.toPos)
+  if (nextMove.valid()) {
+    // console.log(nextMove.fromPos, nextMove.toPos)
     game.move(nextMove.fromPos, nextMove.toPos)
   }
 }
@@ -38,6 +38,12 @@ let manualRun = (player) => {
 }
 
 //----------------------------------------------------
+const reportEndGame = (countMove, message) => {
+  console.log(`Game ended, ${countMove} moves taken`)
+  console.log(message)
+  process.exit()
+}
+
 if (mode === IN_CONSOLE) {
   readline.question(`New game?`, (yn) => {
     if (yn.toLowerCase() === 'n') readline.close()
@@ -49,14 +55,21 @@ if (mode === IN_CONSOLE) {
 }
 
 if (mode === IN_DEBUG) {
-  let player = c.RED
-  let maxTurn = 5
+  let player = c.BLACK
+  let maxTurn = 200
   let turn = 1
-  
-  do  {
-    player = player === c.BLACK ? c.RED : c.BLACK
-    runOneMove(player)
-    turn++
+
+  try {
+    do  {
+      player = player === c.BLACK ? c.RED : c.BLACK
+      runOneMove(player)
+      turn++
+    }
+    while(turn <= maxTurn)
   }
-  while(turn <= maxTurn)
+  catch (message) {
+    reportEndGame(turn, message)
+  }
+
+  reportEndGame(maxTurn, `No winner.`)
 }

@@ -1,6 +1,7 @@
 const c = require('./constants')
 const Match = require('../base/match')
 const Bot = require('../bot/bot')
+const Order = require('../bot/order')
 
 class NormalGame
 {
@@ -33,6 +34,7 @@ class NormalGame
   /**
    * @param {string} color
    * @param {string} botLevel 
+   * @return {Order}
    */
   getSuggesionMove(color, botLevel = c.EASY_GREEDY) {
     if (this.isEnded()) return false

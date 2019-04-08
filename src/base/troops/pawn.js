@@ -24,8 +24,8 @@ class Pawn extends Troop
       let troop = board.at(pos)
       if(troop) {
         this.isEnemy(troop)
-          ? moves.pushCapture(pos, troop.code)
-          : moves.pushGuard(pos, troop.code)
+          ? moves.pushCapture(pos, troop)
+          : moves.pushGuard(pos, troop)
         continue
       }
 

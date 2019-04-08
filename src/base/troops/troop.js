@@ -16,6 +16,10 @@ class Troop
     // this._defendMoves = {}
   }
 
+  toString() {
+    return `${this._symbol}|${this._pos}`
+  }
+
   /**
    * @return {boolean}
    */
@@ -68,10 +72,10 @@ class Troop
   }
 
   /**
-   * @return {array}
+   * @return {Moves}
    */
   get moves() {
-    return this._moves.getActive()
+    return this._moves
   }
 
   /**
@@ -99,7 +103,7 @@ class Troop
    * @return {boolean}
    */
   canMoveTo(toPos) {
-    return this.moves.indexOf(toPos) !== -1
+    return this._moves.getActive().indexOf(toPos) !== -1
   }
 
   /**

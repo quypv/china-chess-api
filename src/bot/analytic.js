@@ -1,4 +1,5 @@
 const c = require('../base/constants')
+const AnalyticPosition = require('./analyticPosition')
 
 class Analytic 
 {
@@ -14,6 +15,12 @@ class Analytic
    */
   get match() {
     return this._match
+  }
+  /**
+   * @return {string}
+   */
+  get color() {
+    return this._color
   }
 
   /**
@@ -61,8 +68,7 @@ class Analytic
     let key = 'allyTroops'
 
     if (!this._has(key)) {
-      let list = this._match.board.getTroopsByColor(this._color)
-      this._put(key, list)
+      this._put(key, this._match.board.getTroopsByColor(this._color))
     }
 
     return this._read(key)
@@ -75,96 +81,7 @@ class Analytic
     let key = 'enemyTroops'
 
     if (!this._has(key)) { 
-      let list = this._match.board.getTroopsByColor(this._enemyColor)
-      this._put(list)
-    }
-
-    return this._read(key)
-  }
-
-  /**
-   * @param {string} color 
-   * @return {array}
-   */
-  _getMoves(troops) {
-    let moves = []
-
-    for (let troop of troops) {
-      for (let pos of troop.moves) {
-        Array.isArray(moves[pos])
-          ? moves[pos].push(troop.code)
-          : moves[pos] = [troop.code]
-      }
-    }
-
-    return moves
-  }
-
-  /**
-   * @return {array}
-   */
-  getAllyMoves() {
-    let key = 'allyMoves'
-
-    if (!this._has(key)) {
-      let arr = this._getMoves(this.getAllyTroops())
-      this._put(key, arr)
-    }
-
-    return this._read(key)
-  }
-
-  /**
-   * @return {array}
-   */
-  getEnemyMoves() {
-    let key = 'enemyMoves'
-
-    if (!this._has(key)) {
-      let arr = this._getMoves(this.getEnemyTroops())
-      this._put(key, arr)
-    }
-
-    return this._read(key)
-  }
-
-  /**
-   * @param {array} troops 
-   * @return {object}
-   */
-  _getPosList(troops) {
-    let map = {}
-
-    for (let troop of troops) {
-      map[troop.code] = troop.pos
-    }
-
-    return map
-  }
-
-  /**
-   * @return {object}
-   */
-  getAllyPosList() {
-    let key = 'allyPos'
-
-    if (!this._has(key)) {
-      let arr = this._getPosList(this.getAllyTroops())
-      this._put(key, arr)
-    }
-
-    return this._read(key)
-  }
-
-  /**
-   * @return {object}
-   */
-  getEnemyPosList() {
-    let key = 'enemyPos'
-
-    if (!this._has(key)) {
-      let arr = this._getPosList(this.getEnemyTroops())
-      this._put(key, arr)
+      this._put(key, this._match.board.getTroopsByColor(this._enemyColor))
     }
 
     return this._read(key)
@@ -172,15 +89,25 @@ class Analytic
 
   /**
    * @param {object} posMap 
-   * @param {object} enemyMoves 
+   * @param {object} enemyMoves
    */
-  _getThreatenList(posMap, enemyMoves) {
+  _getCapturableList(troops) {
     let map = {}
 
-    for (let code in posMap) {
-      let threat = enemyMoves[posMap[code]]
-      if (threat) {
-        map[code] = threat
+    for(let troop of troops) 
+    {
+      if (troop.moves.hasCapture()) {
+        let captureMoves = troop.moves.getCapture()
+
+        for (let pos in captureMoves) 
+        {
+          Array.isArray(map[pos])
+            ? map[pos].attackers.push(troop)
+            : map[pos] = {
+              troop: captureMoves[pos],
+              attackers: [troop]
+            }
+        }
       }
     }
 
@@ -190,11 +117,11 @@ class Analytic
   /**
    * @return {null|array}
    */
-  allyThreatenList() {
+  getThreatenList() {
     let key = 'allyThreatenList'
 
     if (!this._has(key)) {
-      let map = this._getThreatenList(this.getAllyPosList(), this.getEnemyMoves())
+      let map = this._getCapturableList(this.getEnemyTroops())
       this._put(key, map)
     }
 
@@ -204,11 +131,11 @@ class Analytic
   /**
    * @return {null|array}
    */
-  enemyThreatenList() {
-    let key = 'enemyThreatenList'
+  getCaptureList() {
+    let key = 'allyCaptureList'
 
     if (!this._has(key)) {
-      let map = this._getThreatenList(this.getEnemyPosList(), this.getAllyMoves())
+      let map = this._getCapturableList(this.getAllyTroops())
       this._put(key, map)
     }
 
@@ -218,11 +145,11 @@ class Analytic
   /**
    * @param {string} code
    */
-  anAllyThreatenBy(code) {
-    let threat = this.allyThreatenList()[code]
+  // anAllyThreatenBy(code) {
+  //   let threat = this.getAllyThreatenList()[code]
 
-    return threat ? threat : null
-  }
+  //   return threat ? threat : null
+  // }
 
 }
 

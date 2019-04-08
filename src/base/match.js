@@ -11,11 +11,21 @@ const DEFAULT_RESULT = {
 
 class Match 
 {
-  constructor() {
+  constructor(strBoardState = null) {
     this._board = new Board()
     this._history = new Hisotry()
     this._result = DEFAULT_RESULT
-    this.newMatch()
+
+    if (strBoardState) {
+      this.load(strBoardState)
+    }
+    else {
+      this.newMatch()
+    }
+  }
+
+  load(strBoardState) {
+    this._board.loadFromStrState(strBoardState)
   }
 
   newMatch() {

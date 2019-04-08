@@ -43,10 +43,9 @@ class Cannon extends Troop
         }
 
         this.isEnemy(troop) 
-          ? moves.pushCapture(pos, troop.code)
-          : moves.pushGuard(pos, troop.code)
+          ? moves.pushCapture(pos, troop)
+          : moves.pushGuard(pos, troop)
 
-        moves.push(pos)
         break
       }
     }

@@ -1,13 +1,13 @@
 const c = require('../base/constants')
 const POINT = {}
 
-POINT[c.KING]   = 10000
-POINT[c.ROOK]   = 130
-POINT[c.KNIGHT] = 110
-POINT[c.CANNON] = 100
-POINT[c.BISHOP] = 90
-POINT[c.GUARD]  = 60
-POINT[c.PAWN]   = 50
+POINT[c.KING]   = 100000
+POINT[c.ROOK]   = 600
+POINT[c.KNIGHT] = 300
+POINT[c.CANNON] = 400
+POINT[c.BISHOP] = 110
+POINT[c.GUARD]  = 110
+POINT[c.PAWN]   = 70
 
 class StrategyPoint 
 {

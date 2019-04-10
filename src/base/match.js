@@ -14,7 +14,7 @@ class Match
   constructor(strBoardState = null) {
     this._board = new Board()
     this._history = new Hisotry()
-    this._result = DEFAULT_RESULT
+    this._result = Object.assign({}, DEFAULT_RESULT)
 
     if (strBoardState) {
       this.load(strBoardState)

@@ -11,7 +11,7 @@ describe('Bot One - Alpha Beta Pruner', () => {
       E0: 'K', 
       B4: 'R', D4: 'c', F4: 'P', H4: 'N',
       F5: 'n', 
-      E9: 'k',
+      E7: 'r', C9: 'g', E9: 'k',
     }))
     Render.print(game)
     

@@ -7,9 +7,10 @@ const StrategyPoint = require('./strategyPoint')
 const TreeNode = require('./algorithm/TreeNode')
 const MinimaxNode = require('./algorithm/MinimaxNode')
 const Match = require('../base/match')
+const Render = require('../base/render')
 
 const EARLY_SAFE_POINT_LIMIT = 40
-const DEPTH_MAX = 2
+const DEPTH_MAX = 4
 
 class BotOne extends Base
 {
@@ -42,25 +43,27 @@ class BotOne extends Base
       new Order(),
       0
     )
-    this.grow(tree)
+    this.grow(tree, tree.color)
     
     tree.printTree()
 
     return tree
   }
 
-  grow(node, maxDepth = DEPTH_MAX) {
-    let analytic = new Analytic(new Match(node.boardEncode), node.color)
+  grow(node, rootColor, foundWinner = false, maxDepth = DEPTH_MAX) {
     let strategy = new Strategy()
 
     //Leaf reached: calculate point
-    if (node.depth === maxDepth) {
-      node.point = strategy.calculateHealthPoint(analytic).health
-
+    if (node.depth === maxDepth || foundWinner) {
+      let analytic = new Analytic(new Match(node.boardEncode), rootColor)
+      node.point = strategy.calculateHealthPoint(analytic).health - strategy.calculateStrategyPoint(analytic).sum / 2
+      // console.log(`${node.color} ${node.point} ${node.move.toString()}`)
+      // Render.print(new Match(node.boardEncode))
       return;
     }
 
     //Grow
+    let analytic = new Analytic(new Match(node.boardEncode), node.color)
     let troops = analytic.getAllyTroops()
 
     for (let troop of troops) {
@@ -70,7 +73,6 @@ class BotOne extends Base
         moves.push(randGoodFreeMove.toPos)
       }
 
-      // let moves = troop.moves.getActive()
       let fromPos = troop.pos
 
       for (let toPos of moves) {
@@ -86,7 +88,7 @@ class BotOne extends Base
         )
         node.push(childNode)
 
-        this.grow(childNode)
+        this.grow(childNode, rootColor, matchNext.isEnded())
       }
     }
   }

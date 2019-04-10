@@ -8,11 +8,6 @@ const TreeNode = require('./algorithm/TreeNode')
 
 const EARLY_STAGE_TROOP_MAX = 14
 
-const CONTEXT_MINIMAX = {
-  isMax : true, 
-  point: 0, 
-}
-
 class Strategy 
 {
   /**
@@ -107,7 +102,7 @@ class Strategy
     let board = analytic.match.board
     let troop = board.at(fromPos)
 
-    let bestPoint = 0
+    let bestPoint = -Infinity
     let toPos = null
 
     for (let pos of troop.moves.getFree()) {

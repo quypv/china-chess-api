@@ -7,8 +7,8 @@ class NormalGame
 {
   constructor() {
     this._match = new Match()
-    this._black = c.DEFAULT_HUMAN
-    this._red = c.DEFAULT_HUMAN
+    this._black = Object.assign({}, c.DEFAULT_HUMAN)
+    this._red = Object.assign({}, c.DEFAULT_HUMAN)
   }
 
   /**

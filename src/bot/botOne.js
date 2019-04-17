@@ -8,6 +8,7 @@ const TreeNode = require('./algorithm/TreeNode')
 const MinimaxNode = require('./algorithm/MinimaxNode')
 const Match = require('../base/match')
 const Render = require('../base/render')
+const { ScanMovesFlow } = require('../base/flow')
 
 const EARLY_SAFE_POINT_LIMIT = 40
 const DEPTH_MAX = 4
@@ -20,13 +21,7 @@ class BotOne extends Base
    * @return {Order}
    */
   algorithm(analytic) {
-    let strategy = new Strategy()
-    // let point = strategy.calculateStrategyPoint(analytic)
-    // console.log('POINT', point.sum, point.print())
-
-    // return strategy.pickRandomMove(analytic)
-
-    return strategy.alphaBetaPruner(
+    return this._strategy.alphaBetaPruner(
       this.buildTree(analytic)
     )
   }
@@ -44,21 +39,19 @@ class BotOne extends Base
       0
     )
     this.grow(tree, tree.color)
+
+    console.log(ScanMovesFlow.getCount())
     
-    tree.printTree()
+    // tree.printTree()
 
     return tree
   }
 
   grow(node, rootColor, foundWinner = false, maxDepth = DEPTH_MAX) {
-    let strategy = new Strategy()
-
     //Leaf reached: calculate point
     if (node.depth === maxDepth || foundWinner) {
       let analytic = new Analytic(new Match(node.boardEncode), rootColor)
-      node.point = strategy.calculateHealthPoint(analytic).health - strategy.calculateStrategyPoint(analytic).sum / 2
-      // console.log(`${node.color} ${node.point} ${node.move.toString()}`)
-      // Render.print(new Match(node.boardEncode))
+      node.point = this._strategy.calculateHealthPoint(analytic).health - this._strategy.calculateStrategyPoint(analytic).sum / 2
       return;
     }
 
@@ -68,7 +61,7 @@ class BotOne extends Base
 
     for (let troop of troops) {
       let moves = Object.keys(troop.moves.getCapture())
-      let randGoodFreeMove = strategy.randomGoodFreeMove(analytic, troop.pos)
+      let randGoodFreeMove = this._strategy.randomGoodFreeMove(analytic, troop.pos)
       if (randGoodFreeMove.valid()) {
         moves.push(randGoodFreeMove.toPos)
       }
@@ -76,8 +69,10 @@ class BotOne extends Base
       let fromPos = troop.pos
 
       for (let toPos of moves) {
+        ScanMovesFlow.lock()
         let matchNext = new Match(node.boardEncode)
         matchNext.move(fromPos, toPos)
+        ScanMovesFlow.release()
         
         let childNode = new MinimaxNode(
           node, 

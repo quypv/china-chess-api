@@ -13,7 +13,7 @@ describe('Bot One - Alpha Beta Pruner', () => {
       F5: 'n', 
       E7: 'r', C9: 'g', E9: 'k',
     }))
-    Render.print(game)
+    // Render.print(game)
     
     let move = game.getSuggesionMove(c.BLACK)
     // console.log(move.toString())

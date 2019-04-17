@@ -1,6 +1,7 @@
 const c = require('./constants')
 const p = require('./position')
 const Troop = require('./troops/factory')
+const { ScanMovesFlow } = require('./flow')
 
 class Board 
 {
@@ -132,6 +133,10 @@ class Board
    * Scan troop available moves
    */
   scanMoves() {
+    if (ScanMovesFlow.isLocked()) return
+
+    ScanMovesFlow.count()
+
     for (let troop of this.getOnBoardTroops()) {
       troop.calculateMoves(this)
     }

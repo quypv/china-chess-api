@@ -1,12 +1,14 @@
 const c = require('../base/constants')
 const Analytic = require('./analytic')
 const Order = require('./order')
+const Strategy = require('./strategy')
 
 class BotBase
 {
   constructor(myColor) {
     this._color = myColor
     this._enemyColor = myColor === c.BLACK ? c.RED : c.BLACK
+    this._strategy = new Strategy()
   }
 
   /**

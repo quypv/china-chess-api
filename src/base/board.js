@@ -133,13 +133,13 @@ class Board
    * Scan troop available moves
    */
   scanMoves() {
-    if (ScanMovesFlow.isLocked()) return
+    // if (ScanMovesFlow.isLocked()) return
 
-    ScanMovesFlow.count()
+    // ScanMovesFlow.count()
 
-    for (let troop of this.getOnBoardTroops()) {
-      troop.calculateMoves(this)
-    }
+    // for (let troop of this.getOnBoardTroops()) {
+    //   troop.calculateMoves(this)
+    // }
   }
 
   /**
@@ -210,7 +210,7 @@ class Board
 
     if (!troop) return false
     if (!p.validate(toPos)) return false
-    if (!troop.canMoveTo(toPos)) return false
+    // if (!troop.canMoveTo(toPos)) return false
 
     this.take(fromPos)
     this.put(toPos, troop)

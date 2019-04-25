@@ -50,7 +50,7 @@ class MinimaxNode extends TreeNode
   }
 
   echoValue() {
-    return `${this.move.toString()} ${this.value ? this.value : '' } -- ${this.depth}`
+    return `${this.move.toString()} ${this.value ? this.value : '' } ${ this.isLeaf() ? '-- '+this.depth : ''}`
   }
 
 }

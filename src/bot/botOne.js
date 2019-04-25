@@ -11,7 +11,7 @@ const Render = require('../base/render')
 const { ScanMovesFlow } = require('../base/flow')
 
 const EARLY_SAFE_POINT_LIMIT = 40
-const DEPTH_MAX = 4
+const DEPTH_MAX = 2
 
 class BotOne extends Base
 {
@@ -51,7 +51,8 @@ class BotOne extends Base
     //Leaf reached: calculate point
     if (node.depth === maxDepth || foundWinner) {
       let analytic = new Analytic(new Match(node.boardEncode), rootColor)
-      node.point = this._strategy.calculateHealthPoint(analytic).health - this._strategy.calculateStrategyPoint(analytic).sum / 2
+      // node.point = this._strategy.calculateHealthPoint(analytic).health - this._strategy.calculateStrategyPoint(analytic).sum / 2
+      node.point = this._strategy.calculateHealthPoint(analytic).health
       return;
     }
 
@@ -60,8 +61,9 @@ class BotOne extends Base
     let troops = analytic.getAllyTroops()
 
     for (let troop of troops) {
+      troop.calculateMoves(analytic.match.board)
       let moves = Object.keys(troop.moves.getCapture())
-      let randGoodFreeMove = this._strategy.randomGoodFreeMove(analytic, troop.pos)
+      let randGoodFreeMove = this._strategy.randomGoodFreeMove(troop)
       if (randGoodFreeMove.valid()) {
         moves.push(randGoodFreeMove.toPos)
       }
@@ -69,10 +71,12 @@ class BotOne extends Base
       let fromPos = troop.pos
 
       for (let toPos of moves) {
-        ScanMovesFlow.lock()
+        
         let matchNext = new Match(node.boardEncode)
+        // ScanMovesFlow.lock()
+        // let troop = matchNext.board.at(fromPos)
         matchNext.move(fromPos, toPos)
-        ScanMovesFlow.release()
+        // ScanMovesFlow.release()
         
         let childNode = new MinimaxNode(
           node, 

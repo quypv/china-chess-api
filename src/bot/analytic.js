@@ -91,56 +91,56 @@ class Analytic
    * @param {object} posMap 
    * @param {object} enemyMoves
    */
-  _getCapturableList(troops) {
-    let map = {}
+  // _getCapturableList(troops) {
+  //   let map = {}
 
-    for(let troop of troops) 
-    {
-      if (troop.moves.hasCapture()) {
-        let captureMoves = troop.moves.getCapture()
+  //   for(let troop of troops) 
+  //   {
+  //     if (troop.moves.hasCapture()) {
+  //       let captureMoves = troop.moves.getCapture()
 
-        for (let pos in captureMoves) 
-        {
-          Array.isArray(map[pos])
-            ? map[pos].attackers.push(troop)
-            : map[pos] = {
-              troop: captureMoves[pos],
-              attackers: [troop]
-            }
-        }
-      }
-    }
+  //       for (let pos in captureMoves) 
+  //       {
+  //         Array.isArray(map[pos])
+  //           ? map[pos].attackers.push(troop)
+  //           : map[pos] = {
+  //             troop: captureMoves[pos],
+  //             attackers: [troop]
+  //           }
+  //       }
+  //     }
+  //   }
 
-    return map
-  }
-
-  /**
-   * @return {null|array}
-   */
-  getThreatenList() {
-    let key = 'allyThreatenList'
-
-    if (!this._has(key)) {
-      let map = this._getCapturableList(this.getEnemyTroops())
-      this._put(key, map)
-    }
-
-    return this._read(key)
-  }
+  //   return map
+  // }
 
   /**
    * @return {null|array}
    */
-  getCaptureList() {
-    let key = 'allyCaptureList'
+  // getThreatenList() {
+  //   let key = 'allyThreatenList'
 
-    if (!this._has(key)) {
-      let map = this._getCapturableList(this.getAllyTroops())
-      this._put(key, map)
-    }
+  //   if (!this._has(key)) {
+  //     let map = this._getCapturableList(this.getEnemyTroops())
+  //     this._put(key, map)
+  //   }
 
-    return this._read(key)
-  }
+  //   return this._read(key)
+  // }
+
+  /**
+   * @return {null|array}
+   */
+  // getCaptureList() {
+  //   let key = 'allyCaptureList'
+
+  //   if (!this._has(key)) {
+  //     let map = this._getCapturableList(this.getAllyTroops())
+  //     this._put(key, map)
+  //   }
+
+  //   return this._read(key)
+  // }
 
   /**
    * @param {string} code

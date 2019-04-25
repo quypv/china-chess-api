@@ -14,27 +14,27 @@ class Strategy
    * @param {Analytic} analytic 
    * @return {StrategyPoint}
    */
-  calculateStrategyPoint(analytic) {
-    let threatenList = analytic.getThreatenList()
-    let captureList  = analytic.getCaptureList()
-    let point = new StrategyPoint()
+  // calculateStrategyPoint(analytic) {
+  //   let threatenList = analytic.getThreatenList()
+  //   let captureList  = analytic.getCaptureList()
+  //   let point = new StrategyPoint()
 
-    for (let pos in threatenList) {
-      point.pushThreat(
-        threatenList[pos].troop,
-        threatenList[pos].attackers
-      )
-    }
+  //   for (let pos in threatenList) {
+  //     point.pushThreat(
+  //       threatenList[pos].troop,
+  //       threatenList[pos].attackers
+  //     )
+  //   }
 
-    for (let pos in captureList) {
-      point.pushAttack(
-        captureList[pos].troop,
-        captureList[pos].attackers
-      )
-    }
+  //   for (let pos in captureList) {
+  //     point.pushAttack(
+  //       captureList[pos].troop,
+  //       captureList[pos].attackers
+  //     )
+  //   }
 
-    return point
-  }
+  //   return point
+  // }
 
   /**
    * @param {Analytic} analytic 
@@ -98,25 +98,36 @@ class Strategy
    * @param {string} fromPos 
    * @return {Order}
    */
-  randomGoodFreeMove(analytic, fromPos) {
-    let board = analytic.match.board
-    let troop = board.at(fromPos)
+  randomGoodFreeMove(troop) {
+    // let board = analytic.match.board
+    // let troop = board.at(fromPos)
 
-    let bestPoint = -Infinity
-    let toPos = null
+    // let bestPoint = -Infinity
+    // let toPos = null
 
-    for (let pos of troop.moves.getFree()) {
-      let simulateMatch = new Match(board.encode())
-      simulateMatch.move(fromPos, pos)
-      let point = this.calculateStrategyPoint(new Analytic(simulateMatch, analytic.color)).sum
+    // for (let pos of troop.moves.getFree()) {
+    //   let simulateMatch = new Match(board.encode())
+    //   simulateMatch.move(fromPos, pos)
+    //   let point = this.calculateStrategyPoint(new Analytic(simulateMatch, analytic.color)).sum
 
-      if (point >= bestPoint) {
-        bestPoint = point
-        toPos = pos
-      }
-    }
+    //   if (point >= bestPoint) {
+    //     bestPoint = point
+    //     toPos = pos
+    //   }
+    // }
 
-    return toPos ? new Order(fromPos, toPos, troop.symbol) : new Order()
+    // return toPos ? new Order(fromPos, toPos, troop.symbol) : new Order()
+
+    // let board = analytic.match.board
+    // let troop = board.at(fromPos)
+    // troop.calculateMoves(board)
+
+    if (!troop || !troop.moves.hasActive()) return new Order(null)
+
+    let moves = troop.moves.getActive()
+    let toPos = moves[Math.floor(Math.random() * moves.length)]
+
+    return new Order(troop.pos, toPos)
   }
 
   /**

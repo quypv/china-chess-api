@@ -1,6 +1,7 @@
 const c = require('../constants')
 const p = require('../position')
 const Moves = require('./moves')
+const { ScanMovesFlow } = require('../flow')
 
 class Troop 
 {
@@ -91,6 +92,7 @@ class Troop
   calculateMoves(board) { 
     let moves = this._pos ? this.simulateMoves(board) : new Moves()
     this._moves = moves
+    ScanMovesFlow.count()
   }
 
   /**

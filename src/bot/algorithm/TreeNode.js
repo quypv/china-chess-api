@@ -40,10 +40,14 @@ class TreeNode
     return `${this.value} (${this.context})`
   }
 
+  isLeaf() {
+    return !this._children.length
+  }
+
   printTree(indent = '') {
     let str = indent
 
-    if (!this._children.length) {
+    if (this.isLeaf()) {
       str += "\\_";
       indent += "  ";
     }
